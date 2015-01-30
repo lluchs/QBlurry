@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->selectImageButton, SIGNAL(clicked()), this, SLOT(selectImage()));
+    connect(ui->saveResultButton, SIGNAL(clicked()), this, SLOT(saveResult()));
     connect(ui->sigmaSlider, SIGNAL(sliderMoved(int)), this, SLOT(updateBlur()));
     connect(ui->sizeSlider, SIGNAL(sliderMoved(int)), this, SLOT(updateBlur()));
 }
@@ -40,6 +41,18 @@ void MainWindow::selectImage()
     result = new QImage(image->size(), image->format());
     blurrer = new Blurrer(this, image, result);
     updateBlur();
+}
+
+void MainWindow::saveResult()
+{
+    if (!result) return;
+
+    auto fileName = QFileDialog::getSaveFileName(this, "Save Image", "", "Image Files (*.png *.jpg *.bmp)");
+    if (result->save(fileName)) {
+        ui->statusBar->showMessage(QString("Saved to ") + fileName);
+    } else {
+        QMessageBox::critical(this, "Saving Error", "Could not save image file.");
+    }
 }
 
 void MainWindow::updateBlur()

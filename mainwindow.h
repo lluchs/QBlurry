@@ -20,6 +20,7 @@ public:
 
 private slots:
     void selectImage();
+    void saveResult();
     void updateBlur();
 
 private:
